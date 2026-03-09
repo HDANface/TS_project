@@ -9,7 +9,7 @@ from rest_framework.validators import UniqueValidator
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from .models import UserProfile
 
-
+# 用户资料序列化器
 class UserProfileSerializer(serializers.ModelSerializer):
     """
     用户资料序列化器
@@ -20,7 +20,7 @@ class UserProfileSerializer(serializers.ModelSerializer):
         fields = ['role', 'real_name', 'avatar', 'phone']
         read_only_fields = ['role']
 
-
+# 用户注册序列化器
 class RegisterSerializer(serializers.ModelSerializer):
     """
     用户注册序列化器
@@ -102,7 +102,7 @@ class RegisterSerializer(serializers.ModelSerializer):
         
         return user
 
-
+# 自定义登录序列化器
 class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
     """
     自定义登录序列化器
@@ -134,7 +134,7 @@ class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
         
         return data
 
-
+# 用户信息序列化器
 class UserSerializer(serializers.ModelSerializer):
     """
     用户信息序列化器
@@ -147,7 +147,7 @@ class UserSerializer(serializers.ModelSerializer):
         fields = ['id', 'username', 'email', 'first_name', 'last_name', 'profile']
         read_only_fields = fields
 
-
+# 修改密码序列化器
 class ChangePasswordSerializer(serializers.Serializer):
     """
     修改密码序列化器

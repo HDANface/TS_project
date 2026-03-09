@@ -1,6 +1,5 @@
 """
 教学辅助系统 - 数据库模型设计
-专注于编程类课程的教学、作业提交与 AI 批改
 """
 
 from django.db import models
@@ -43,6 +42,7 @@ class UserProfile(models.Model):
     avatar = models.URLField(
         verbose_name='头像 URL',
         blank=True,
+        default='media/default/avatar/avatar.png',
         help_text='用户头像的图片链接'
     )
     phone = models.CharField(
