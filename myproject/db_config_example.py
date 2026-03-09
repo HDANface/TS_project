@@ -1,14 +1,9 @@
 """
 数据库配置示例 - MySQL 配置
-将此配置复制到 myproject/settings.py 的 DATABASES 部分
-
-注意：需要先安装 mysqlclient 或 pymysql
 """
 
 # 安装依赖：
 # pip install mysqlclient
-# 或者
-# pip install pymysql
 
 DATABASES = {
     'default': {
@@ -39,7 +34,6 @@ DATABASES = {
     }
 }
 
-# 如果你使用环境变量管理配置（推荐），可以这样写：
 """
 import os
 

@@ -237,19 +237,17 @@ class ErrorTagAnalytics:
 
 # 使用示例
 if __name__ == '__main__':
-    # 示例 1: 统计课程 1 的 Top 10 易错点
+
     print("=== 课程 Top 10 易错点 ===")
     errors = CourseAnalytics.get_course_error_statistics(course_id=1, limit=10)
     for error in errors:
         print(f"知识点：{error['tag_name']}, 错误数：{error['error_count']}, 影响学生数：{error['student_count']}")
-    
-    # 示例 2: 获取作业 1 的提交统计
+
     print("\n=== 作业提交统计 ===")
     stats = AssignmentAnalytics.get_submission_statistics(assignment_id=1)
     print(f"总提交数：{stats['total_submissions']}")
     print(f"平均分：{stats['average_score']}")
     
-    # 示例 3: 获取学生 1 的薄弱点
     print("\n=== 学生薄弱知识点 ===")
     weak_points = StudentAnalytics.get_student_weak_points(student_id=1, limit=5)
     for point in weak_points:

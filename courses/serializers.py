@@ -87,7 +87,7 @@ class RegisterSerializer(serializers.ModelSerializer):
         role = validated_data.pop('role')
         real_name = validated_data.pop('real_name')
         
-        # 创建用户（密码会自动哈希）
+        # 创建用户（自动哈希）
         user = User.objects.create_user(
             username=validated_data['username'],
             email=validated_data.get('email', ''),
