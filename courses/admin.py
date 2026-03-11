@@ -1,12 +1,85 @@
 """
 教学辅助系统 - Django Admin 配置
 提供便捷的后台管理界面
+
+使用说明：
+1. list_display: 列表页显示的字段
+2. list_filter: 右侧过滤器
+3. search_fields: 搜索框支持的字段
+4. readonly_fields: 只读字段（不可编辑）
+5. fieldsets: 详情页字段分组
+6. date_hierarchy: 顶部日期导航
 """
 
 from django.contrib import admin
+from django.contrib.auth.models import User
+from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from django.utils.html import format_html
 from django.utils.safestring import mark_safe
-from .models import Course, CourseEnrollment, Assignment, Submission, AIResult, ErrorTag
+from .models import Course, CourseEnrollment, Assignment, Submission, AIResult, ErrorTag, UserProfile
+
+
+# ==================== User Admin (自定义) ====================
+
+# 取消默认的 User 注册
+admin.site.unregister(User)
+
+@admin.register(User)
+class UserAdmin(BaseUserAdmin):
+    """
+    User Admin 配置
+    """
+    # 列表页显示
+    list_display = [
+        'username',
+        'email',
+        'real_name_display',  
+        'role_display',       
+        'is_staff',
+        'is_active',
+    ]
+    
+    # 右侧过滤器
+    list_filter = ['is_staff', 'is_superuser', 'is_active', 'profile__role']
+    
+    # 搜索字段
+    search_fields = ['username', 'email', 'profile__real_name']
+    
+    # 只读字段
+    readonly_fields = ['date_joined', 'last_login', 'real_name_display', 'role_display']
+    
+    fieldsets = (
+        ('基本信息', {
+            'fields': ('username', 'email', 'password')
+        }),
+        ('个人信息', {
+            'fields': ('real_name_display', 'role_display'),
+            'description': '真实姓名和角色身份（来自 UserProfile）'
+        }),
+        ('权限设置', {
+            'fields': ('is_active', 'is_staff', 'is_superuser', 'groups', 'user_permissions')
+        }),
+        ('登录信息', {
+            'fields': ('last_login', 'date_joined'),
+            'classes': ('collapse',)
+        }),
+    )
+    
+    # 自定义方法 - 显示真实姓名
+    def real_name_display(self, obj):
+        """显示真实姓名（来自 UserProfile）"""
+        return obj.profile.real_name if hasattr(obj, 'profile') else '-'
+    real_name_display.short_description = '真实姓名'
+    
+    # 自定义方法 - 显示角色
+    def role_display(self, obj):
+        """显示角色身份（来自 UserProfile）"""
+        if hasattr(obj, 'profile'):
+            role_display = obj.profile.get_role_display()
+            return f"{role_display} ({obj.profile.role})"
+        return '-'
+    role_display.short_description = '角色身份'
+
 
 
 @admin.register(Course)
@@ -52,7 +125,6 @@ class CourseEnrollmentAdmin(admin.ModelAdmin):
     readonly_fields = ['joined_at']
 
 
-@admin.register(Assignment)
 class AssignmentAdmin(admin.ModelAdmin):
     """作业管理配置"""
     list_display = [
@@ -200,6 +272,6 @@ class ErrorTagAdmin(admin.ModelAdmin):
 
 
 # 自定义 Admin 站点标题和副标题
-admin.site.site_header = '教学辅助系统管理后台'
-admin.site.site_title = '教学辅助系统'
-admin.site.index_title = '欢迎使用教学辅助系统管理平台'
+admin.site.site_header = '智码·知行——管理后台'
+admin.site.site_title = '智码·知行'
+admin.site.index_title = '欢迎使用 智码·知行 管理平台'
